@@ -10,7 +10,8 @@ export type FeatureItem = { title?: string; description?: string; icon?: string;
 export type SupportTab = { title?: string; heading?: string; description?: string; imageUrl?: string; thumbnails?: string[]; linkUrl?: string; sections?: LegalStatementSection[] };
 export type ProcessGalleryImage = string | { imageUrl?: string; title?: string };
 export type ProcessItem = { title?: string; description?: string; imageUrl?: string; galleryImages?: ProcessGalleryImage[]; linkUrl?: string; sections?: LegalStatementSection[] };
-export type AboutData = { imageUrl?: string; body?: string; linkUrl?: string };
+export type AboutItem = { description?: string; icon?: string };
+export type AboutData = { imageUrl?: string; galleryImages?: string[]; body?: string; linkUrl?: string; items?: AboutItem[] };
 export type ContactPanelData = { consultantName?: string; consultantTitle?: string; consultantAvatarUrl?: string; description?: string; buttonText?: string; industryOptions?: string[] };
 export type ContactInfoItem = { label?: string; value?: string };
 export type ContactInfoData = { body?: string; mapImageUrl?: string; items?: ContactInfoItem[] };
@@ -26,7 +27,8 @@ export type SupportPageData = {
   serviceStations?: SupportPageServiceStation[];
 };
 export type SectionData = {
-  items?: FeatureItem[] | ProcessItem[] | ContactInfoItem[];
+  items?: FeatureItem[] | ProcessItem[] | ContactInfoItem[] | AboutItem[];
+  galleryImages?: string[];
   tabs?: SupportTab[];
   sections?: LegalStatementSection[];
   imageUrl?: string;
@@ -64,7 +66,8 @@ export const sectionNames: Record<string, string> = {
   labTesting: '检测详情',
   qualityInspection: '品质检验详情',
   certificatePreview: '荣誉资质',
-  supportPage: '技术支持二级页面'
+  supportPage: '技术支持二级页面',
+  projectCases: '项目案例'
 };
 
 const paragraphsToText = (paragraphs?: string[]) => (paragraphs || []).join('\n\n');
@@ -322,13 +325,48 @@ export function ProcessModuleEditor({ items, backgroundImageUrl, onUpdate, onCha
 }
 
 export function AboutEditor({ data, onChange }: { data: AboutData; onChange: (patch: Partial<SectionData>) => void }) {
+  const items: AboutItem[] = data.items && data.items.length > 0
+    ? data.items.slice(0, 3)
+    : [
+        { description: '桔尔润（北京）润滑油有限公司成立于2004年，位于北京市，厂区占地面积150余亩，强大实力让您放心。' },
+        { description: '桔尔润坚持以研发生产为核心，围绕汽车润滑、工业润滑和特种油品场景提供稳定产品。' },
+        { description: '公司拥有完善的渠道服务体系，为客户提供可靠的产品交付与合作支持。' },
+      ];
+  const galleryImages = data.galleryImages || [];
+  function updateItem(index: number, patch: Partial<AboutItem>) {
+    const next = [...items];
+    next[index] = { ...next[index], ...patch };
+    onChange({ items: next });
+  }
   return (
-    <Form layout="vertical">
-      <Row gutter={16}>
-        <Col xs={24} lg={12}><Form.Item label="公司简介"><Input.TextArea rows={8} value={data.body || ''} onChange={(e) => onChange({ body: e.target.value })} /></Form.Item></Col>
-        <Col xs={24} lg={12}><Card title="展示图片"><Dropzone value={data.imageUrl} cropPreset="aboutPreview" onChange={(url) => onChange({ imageUrl: url })} /></Card></Col>
+    <div>
+      <Row gutter={16} style={{ marginBottom: 18 }}>
+        <Col xs={24} lg={12}><Form layout="vertical"><Form.Item label="公司简介"><Input.TextArea rows={6} value={data.body || ''} onChange={(e) => onChange({ body: e.target.value })} /></Form.Item></Form></Col>
+        <Col xs={24} lg={12}><Card title="详情页展示图片" size="small"><Dropzone value={data.imageUrl} cropPreset="aboutPreview" onChange={(url) => onChange({ imageUrl: url })} /></Card></Col>
       </Row>
-    </Form>
+      <Card title="首页四图展示" size="small" style={{ marginBottom: 18 }}>
+        <Dropzone value="" multiple cropPreset="aboutPreviewGallery" onChange={() => {}} onMultipleChange={(urls) => onChange({ galleryImages: [...galleryImages, ...urls].slice(0, 4) })} hint="最多设置 4 张首页展示图，上传前裁剪为 240 × 320" />
+        <Row gutter={[8, 8]} style={{ marginTop: 12 }}>{galleryImages.map((imageUrl, imageIndex) => (
+          <Col xs={12} sm={6} key={`${imageUrl}-${imageIndex}`}>
+            <Card size="small" cover={<img src={imageUrl} alt={`首页关于我们展示图 ${imageIndex + 1}`} style={{ height: 120, objectFit: 'cover' }} />} actions={[<Button type="link" danger size="small" onClick={() => onChange({ galleryImages: galleryImages.filter((_, index) => index !== imageIndex) })}>删除</Button>]} />
+          </Col>
+        ))}</Row>
+        <Typography.Text type="secondary">已设置 {galleryImages.length}/4 张首页展示图；未设置时会复用详情页展示图片。</Typography.Text>
+      </Card>
+      <Typography.Paragraph type="secondary" style={{ marginBottom: 12 }}>编辑底部三列说明文字。</Typography.Paragraph>
+      <Row gutter={[16, 16]}>
+        {items.map((item, i) => (
+          <Col xs={24} sm={8} key={i}>
+            <Card title={`说明 ${i + 1}`} size="small">
+              <Form layout="vertical">
+                <Form.Item label="图标"><Input value={item.icon || ''} onChange={(e) => updateItem(i, { icon: e.target.value })} placeholder="可留空使用默认图标" /></Form.Item>
+                <Form.Item label="描述文字"><Input.TextArea rows={4} value={item.description || ''} onChange={(e) => updateItem(i, { description: e.target.value })} /></Form.Item>
+              </Form>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </div>
   );
 }
 
@@ -468,5 +506,41 @@ export function ContactPanelEditor({ data, onChange }: { data: ContactPanelData;
         </Card>
       </Col>
     </Row>
+  );
+}
+
+export type ProjectCaseItem = { title?: string; description?: string; imageUrl?: string };
+
+export function ProjectCasesEditor({ items, onUpdate, onChange }: { items: ProjectCaseItem[]; onUpdate: (index: number, patch: Partial<ProjectCaseItem>) => void; onChange: (items: ProjectCaseItem[]) => void }) {
+  const canAddItem = items.length < 6;
+
+  function addItem() {
+    if (!canAddItem) return;
+    onChange([...items, { title: '', description: '', imageUrl: '' }]);
+  }
+
+  return (
+    <div>
+      <Typography.Paragraph type="secondary">显示在首页“项目案例”区域，每行展示 3 张，共两行。建议设置 6 个案例。</Typography.Paragraph>
+      <Space style={{ marginBottom: 12 }}><Button type="primary" disabled={!canAddItem} onClick={addItem}>新增案例</Button><Typography.Text type="secondary">最多设置 6 个案例</Typography.Text></Space>
+      <SectionCardGroup mode="accordion" defaultExpandedIndex={0}>
+        {items.map((item, index) => (
+          <SectionCard key={index} title={item.title || `案例 ${index + 1}`} description={item.description?.slice(0, 40) || '展开后编辑案例内容'} extra={<ConfirmButton danger size="small" title="确定删除这个案例吗？" onConfirm={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}>删除</ConfirmButton>}>
+            <Row gutter={16}>
+              <Col xs={24} lg={12}>
+                <Form layout="vertical">
+                  <Form.Item label="案例标题"><Input value={item.title || ''} onChange={(e) => onUpdate(index, { title: e.target.value })} placeholder="例如：汽车润滑油项目" /></Form.Item>
+                  <Form.Item label="案例描述"><Input.TextArea rows={3} value={item.description || ''} onChange={(e) => onUpdate(index, { description: e.target.value })} placeholder="简要描述项目内容" /></Form.Item>
+                </Form>
+              </Col>
+              <Col xs={24} lg={12}>
+                <Card title="案例图片"><Dropzone value={item.imageUrl} cropPreset="processMain" onChange={(url) => onUpdate(index, { imageUrl: url })} hint="建议上传 3:2 比例图片" /></Card>
+              </Col>
+            </Row>
+          </SectionCard>
+        ))}
+      </SectionCardGroup>
+      {items.length === 0 && <Card><Typography.Text type="secondary">还没有案例，请点击“新增案例”。</Typography.Text></Card>}
+    </div>
   );
 }

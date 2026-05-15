@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getHomeData, type Banner, type ContentSection, type HomeData, type ProductCategory } from '../api/publicApi';
-import { normalizeHomeCertificateImages, type HomeCertificateImage } from '../utils/homeCertificateImages';
 
 const fallbackCategories = ['汽油机油', '柴油机油', '工业油品', '导热油', '润滑油', '特种油品研发'];
 
@@ -53,6 +52,21 @@ function FactoryMenuIcon({ index }: { index: number }) {
   return <svg className="factory-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[index] || icons[0]}</svg>;
 }
 
+function AboutFeatureIcon() {
+  return (
+    <svg className="about-preview-feature-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M14 10l24 24" />
+      <path d="M34 6l8 8l-9 9l-8-8z" />
+      <path d="M10 34l4 4l-6 6l-4-4z" />
+      <path d="M38 14l4-4" />
+      <path d="M10 10l28 28" />
+      <path d="M16 6l-8 8l9 9l8-8z" />
+      <path d="M38 34l-4 4l6 6l4-4z" />
+      <path d="M10 14l-4-4" />
+    </svg>
+  );
+}
+
 export function HomePage() {
   const [homeData, setHomeData] = useState<HomeData | null>(null);
   const [activeBannerIndex, setActiveBannerIndex] = useState(0);
@@ -83,12 +97,10 @@ export function HomePage() {
   return (
     <main>
       <HeroCarousel banners={bannerImages} banner={banner} activeBannerIndex={activeBannerIndex} onSelect={setActiveBannerIndex} onHover={setCarouselPaused} />
-      <FeatureCards section={homeData?.sections.featureCards} />
-      <SupportModule section={homeData?.sections.supportModule} activeIndex={activeSupportIndex} onSelect={setActiveSupportIndex} onPreview={setPreviewImage} />
+      <AboutPreview section={homeData?.sections.aboutPreview} companyName={homeData?.siteProfile?.companyName} />
       <ProductCategoryGrid categories={homeData?.categories || []} />
       <ProcessModule section={homeData?.sections.processModule} />
-      <AboutPreview section={homeData?.sections.aboutPreview} companyName={homeData?.siteProfile?.companyName} />
-      <CertificatePreview images={normalizeHomeCertificateImages(homeData?.sections.certificatePreview?.data?.images)} title={homeData?.sections.certificatePreview?.title} />
+      <ProjectCases section={homeData?.sections.projectCases} />
       {previewImage && <ImagePreviewOverlay image={previewImage} onClose={() => setPreviewImage(null)} />}
     </main>
   );
@@ -278,60 +290,77 @@ export function ProcessModule({ section }: { section?: ContentSection }) {
 }
 
 export function AboutPreview({ section, companyName }: { section?: ContentSection; companyName?: string }) {
-  const data = section?.data as { imageUrl?: string; body?: string; linkUrl?: string } | undefined;
-  const title = companyName || '桔尔润（北京）润滑油有限公司';
-  const linkUrl = '/about';
+  type AboutItem = { description?: string; icon?: string };
+  const data = section?.data as { items?: AboutItem[]; imageUrl?: string; body?: string; galleryImages?: string[] } | undefined;
+  const items: AboutItem[] = (data?.items && data.items.length > 0)
+    ? data.items.slice(0, 3)
+    : [
+        { description: '桔尔润（北京）润滑油有限公司成立于2004年，位于北京市，厂区占地面积150余亩，强大实力让您放心。' },
+        { description: '桔尔润坚持以研发生产为核心，围绕汽车润滑、工业润滑和特种油品场景提供稳定产品。' },
+        { description: '公司拥有完善的渠道服务体系，为客户提供可靠的产品交付与合作支持。' },
+      ];
+  const title = companyName || section?.subtitle || '桔尔润（北京）润滑油有限公司';
+  const galleryImages = data?.galleryImages?.filter(Boolean) || [];
+  const images = galleryImages.length > 0 ? galleryImages.slice(0, 4) : data?.imageUrl ? [data.imageUrl] : [];
+
   return (
-    <section className="section container" id="about">
-      <SectionTitle title={section?.title || '关于我们'} subtitle={section?.subtitle} />
-      <div className="about-block">
-        <Link className="about-media-link" to={linkUrl}>
-          {data?.imageUrl ? <img className="about-image" src={data.imageUrl} alt={section?.title || '关于我们'} /> : <div className="about-photo">Kronprins<br />王储</div>}
-        </Link>
-        <Link className="about-copy" to={linkUrl}>
-          <h3>{title}</h3>
-          <p>{data?.body || '桔尔润（北京）润滑油有限公司专注润滑油产品研发、生产与渠道服务。公司围绕汽车润滑、工业润滑和特种油品场景，为客户提供稳定可靠的产品和合作支持。'}</p>
-        </Link>
+    <section className="about-preview-section" id="about">
+      <div className="about-preview-card-shell">
+        <div className="about-preview-header">
+          <h2>{section?.title || '关于我们'}</h2>
+          <p>{title}</p>
+        </div>
+        <div className="about-preview-gallery">
+          {Array.from({ length: 4 }).map((_, index) => {
+            const imageUrl = images[index] || images[0];
+            return (
+              <figure className="about-preview-photo" key={index}>
+                {imageUrl ? <img src={imageUrl} alt={`${section?.title || '关于我们'} ${index + 1}`} /> : <div className={`about-preview-photo-fallback about-preview-photo-fallback-${index + 1}`} />}
+              </figure>
+            );
+          })}
+        </div>
+      </div>
+      <div className="about-preview-features">
+        {items.map((item, index) => (
+          <article className="about-preview-feature" key={index}>
+            <span className="about-preview-icon">{item.icon ? item.icon : <AboutFeatureIcon />}</span>
+            <p>{item.description || ''}</p>
+          </article>
+        ))}
       </div>
     </section>
   );
 }
 
-export function CertificatePreview({ images, title }: { images: HomeCertificateImage[]; title?: string }) {
-  const allItems = images.filter((image) => image.isPublished);
-  const [startIndex, setStartIndex] = useState(0);
-  const visibleItems = Array.from({ length: Math.min(4, allItems.length) }, (_, index) => allItems[(startIndex + index) % allItems.length]);
-
-  useEffect(() => {
-    setStartIndex(0);
-  }, [images.length]);
-
-  function previousCertificates() {
-    if (allItems.length === 0) return;
-    setStartIndex((index) => (index - 1 + allItems.length) % allItems.length);
-  }
-
-  function nextCertificates() {
-    if (allItems.length === 0) return;
-    setStartIndex((index) => (index + 1) % allItems.length);
-  }
-
-  if (allItems.length === 0) return null;
+export function ProjectCases({ section }: { section?: ContentSection }) {
+  type ProjectCaseItem = { title?: string; description?: string; imageUrl?: string };
+  const items = (section?.data.items as ProjectCaseItem[] | undefined) || [
+    { title: '汽车润滑油项目', description: '为汽车行业提供高性能润滑油解决方案' },
+    { title: '工业润滑油项目', description: '工业设备润滑维护一站式服务' },
+    { title: '特种油品研发', description: '针对特殊场景定制研发油品' },
+    { title: '品牌定制服务', description: '成熟的品牌定制与产品包装方案' },
+    { title: '导热油项目', description: '高温导热油应用解决方案' },
+    { title: '合成油脂项目', description: '高性能合成油脂研发与生产' }
+  ];
 
   return (
-    <section className="section certificate-showcase-section">
-      <SectionTitle title={title || '荣誉资质'} />
-      <div className="certificate-stage">
-        <button className="certificate-arrow" type="button" aria-label="切换上一组荣誉资质" onClick={previousCertificates}>‹</button>
-        <div className="certificate-display">
-          {visibleItems.map((certificate, index) => (
-            <Link to="/certificates" className={`certificate-display-card certificate-display-card-${index + 1}`} key={`${certificate.id}-${startIndex}-${index}`}>
-              <img src={certificate.imageUrl} alt={certificate.title} />
-            </Link>
+    <section className="section project-cases-section">
+      <div className="container">
+        <SectionTitle title={section?.title || '项目案例'} subtitle={section?.subtitle} />
+        <div className="project-cases-grid">
+          {items.map((item, index) => (
+            <article className="project-case-card" key={item.title || index}>
+              <div className="project-case-image">
+                {item.imageUrl ? <img src={item.imageUrl} alt={item.title} /> : <div className="project-case-fallback" />}
+              </div>
+              <div className="project-case-text">
+                <h3>{item.title}</h3>
+                {item.description && <p>{item.description}</p>}
+              </div>
+            </article>
           ))}
-          <div className="certificate-shelf" />
         </div>
-        <button className="certificate-arrow" type="button" aria-label="切换下一组荣誉资质" onClick={nextCertificates}>›</button>
       </div>
     </section>
   );

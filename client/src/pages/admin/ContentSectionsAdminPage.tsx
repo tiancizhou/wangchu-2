@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { App, Alert, Button, Card, Col, Form, Input, List, Row, Space, Switch, Tag, Typography } from 'antd';
 import { adminContentSections, saveContentSection } from '../../api/adminApi';
-import { AboutEditor, ContactInfoEditor, ContactPanelEditor, FeatureCardsEditor, GenericItemsEditor, LegalStatementEditor, ProcessModuleEditor, sectionNames, SupportModuleEditor, SupportPageEditor, type AboutData, type ContactInfoData, type ContactPanelData, type FeatureItem, type LegalStatementData, type ProcessItem, type SectionData, type SupportPageData, type SupportTab } from '../../components/admin/ContentSectionEditors';
+import { AboutEditor, ContactInfoEditor, ContactPanelEditor, FeatureCardsEditor, GenericItemsEditor, LegalStatementEditor, ProcessModuleEditor, ProjectCasesEditor, sectionNames, SupportModuleEditor, SupportPageEditor, type AboutData, type ContactInfoData, type ContactPanelData, type FeatureItem, type LegalStatementData, type ProcessItem, type ProjectCaseItem, type SectionData, type SupportPageData, type SupportTab } from '../../components/admin/ContentSectionEditors';
 import type { ContentSection } from '../../api/publicApi';
 import { PageHeader } from '../../admin/components';
 
@@ -27,12 +27,13 @@ export const homeContentConfig: ContentSectionEditorConfig = {
   pageKey: 'home',
   title: '首页内容管理',
   description: '在这里修改首页上的文字、图片和模块显示状态。选择一个模块后填写表单，保存后会同步到网站首页。',
-  editableKeys: ['featureCards', 'supportModule', 'processModule', 'aboutPreview'],
+  editableKeys: ['featureCards', 'supportModule', 'processModule', 'aboutPreview', 'projectCases'],
   moduleHelp: {
     featureCards: '显示在首页顶部服务优势区域，建议保持 4 个卡片。',
-    supportModule: '显示在“生产设计与制作”区域，用于介绍生产、检测、检验能力。',
+    supportModule: '显示在”生产设计与制作”区域，用于介绍生产、检测、检验能力。',
     processModule: '显示在首页深色工艺区域，用于介绍制作工艺和设备能力。',
-    aboutPreview: '显示在首页“关于我们”区域，用于展示公司简介和图片。'
+    aboutPreview: '显示在首页”关于我们”区域，用于展示公司简介和图片。',
+    projectCases: '显示在首页”项目案例”区域，用于展示项目案例图片、标题和说明。'
   },
   loadingText: '首页内容加载中...',
   emptyText: '还没有可编辑的首页模块，请先运行初始化数据。',
@@ -127,6 +128,12 @@ export function ContentSectionsAdminPage({ config = homeContentConfig }: { confi
     setData({ items });
   }
 
+  function updateProjectCase(index: number, patch: Partial<ProjectCaseItem>) {
+    const items = [...(((editing?.data.items || []) as ProjectCaseItem[]))];
+    items[index] = { ...items[index], ...patch };
+    setData({ items });
+  }
+
   async function save(event: FormEvent) {
     event.preventDefault();
     if (!editing) return;
@@ -192,6 +199,7 @@ export function ContentSectionsAdminPage({ config = homeContentConfig }: { confi
                   {editing.sectionKey === 'contactInfo' && <ContactInfoEditor data={editing.data as ContactInfoData} onChange={setData} />}
                   {editing.sectionKey === 'legalStatement' && <LegalStatementEditor data={editing.data as LegalStatementData} onChange={setData} />}
                   {editing.sectionKey === 'certificatePreview' && <Card><Typography.Paragraph type="secondary">荣誉资质图片请在"荣誉资质"管理中上传和排序。此处仅编辑模块标题和显示状态。</Typography.Paragraph></Card>}
+                  {editing.sectionKey === 'projectCases' && <ProjectCasesEditor items={(editing.data.items || []) as ProjectCaseItem[]} onUpdate={updateProjectCase} onChange={(items) => setData({ items })} />}
                   <Card><Space><Button type="primary" htmlType="submit" loading={saving}>{saving ? '保存中...' : (config.saveButtonText || '保存内容')}</Button><Typography.Text type={dirty ? 'warning' : 'success'}>{dirty ? '有未保存的修改' : '当前内容已保存'}</Typography.Text></Space></Card>
                 </Space>
               </form>
