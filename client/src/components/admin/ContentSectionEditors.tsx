@@ -27,7 +27,7 @@ export type SupportPageData = {
   serviceStations?: SupportPageServiceStation[];
 };
 export type SectionData = {
-  items?: FeatureItem[] | ProcessItem[] | ContactInfoItem[] | AboutItem[];
+  items?: FeatureItem[] | ProcessItem[] | ContactInfoItem[] | AboutItem[] | ProjectCaseItem[];
   galleryImages?: string[];
   tabs?: SupportTab[];
   sections?: LegalStatementSection[];
@@ -509,28 +509,30 @@ export function ContactPanelEditor({ data, onChange }: { data: ContactPanelData;
   );
 }
 
-export type ProjectCaseItem = { title?: string; description?: string; imageUrl?: string };
+export type ProjectCaseItem = { title?: string; subtitle?: string; description?: string; imageUrl?: string; sections?: LegalStatementSection[] };
 
 export function ProjectCasesEditor({ items, onUpdate, onChange }: { items: ProjectCaseItem[]; onUpdate: (index: number, patch: Partial<ProjectCaseItem>) => void; onChange: (items: ProjectCaseItem[]) => void }) {
-  const canAddItem = items.length < 6;
+  const normalizedItems = items.map(({ description, ...item }) => ({ ...item, subtitle: item.subtitle || description || '' }));
+  const canAddItem = normalizedItems.length < 6;
 
   function addItem() {
     if (!canAddItem) return;
-    onChange([...items, { title: '', description: '', imageUrl: '' }]);
+    onChange([...normalizedItems, { title: '', subtitle: '', imageUrl: '', sections: [] }]);
   }
 
   return (
     <div>
       <Typography.Paragraph type="secondary">显示在首页“项目案例”区域，前台每行展示 3 张，共两行。图片会按前台卡片比例裁剪，建议设置 6 个案例。</Typography.Paragraph>
-      <Space style={{ marginBottom: 12 }}><Button type="primary" disabled={!canAddItem} onClick={addItem}>新增案例</Button><Typography.Text type="secondary">已设置 {items.length}/6 个案例</Typography.Text></Space>
+      <Space style={{ marginBottom: 12 }}><Button type="primary" disabled={!canAddItem} onClick={addItem}>新增案例</Button><Typography.Text type="secondary">已设置 {normalizedItems.length}/6 个案例</Typography.Text></Space>
       <SectionCardGroup mode="accordion" defaultExpandedIndex={0}>
-        {items.map((item, index) => (
-          <SectionCard key={index} title={item.title || `案例 ${index + 1}`} description={item.description?.slice(0, 40) || '展开后编辑案例内容'} extra={<ConfirmButton danger size="small" title="确定删除这个案例吗？" onConfirm={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}>删除</ConfirmButton>}>
+        {normalizedItems.map((item, index) => (
+          <SectionCard key={index} title={item.title || `案例 ${index + 1}`} description={item.subtitle?.slice(0, 40) || '展开后编辑案例内容'} extra={<ConfirmButton danger size="small" title="确定删除这个案例吗？" onConfirm={() => onChange(normalizedItems.filter((_, itemIndex) => itemIndex !== index))}>删除</ConfirmButton>}>
             <Row gutter={16} align="top">
               <Col xs={24} lg={12}>
                 <Form layout="vertical">
                   <Form.Item label="案例标题"><Input value={item.title || ''} onChange={(e) => onUpdate(index, { title: e.target.value })} placeholder="例如：汽车润滑油项目" /></Form.Item>
-                  <Form.Item label="案例描述"><Input.TextArea rows={4} value={item.description || ''} onChange={(e) => onUpdate(index, { description: e.target.value })} placeholder="前台显示在标题下方，建议控制在一行内" /></Form.Item>
+                  <Form.Item label="案例副标题"><Input.TextArea rows={3} value={item.subtitle || ''} onChange={(e) => onUpdate(index, { subtitle: e.target.value })} placeholder="前台显示在标题下方，建议控制在一行内" /></Form.Item>
+                  <SingleDetailArticleEditor item={item} onUpdate={(patch) => onUpdate(index, patch)} title="项目案例详情正文" />
                 </Form>
               </Col>
               <Col xs={24} lg={12}>
@@ -540,7 +542,7 @@ export function ProjectCasesEditor({ items, onUpdate, onChange }: { items: Proje
           </SectionCard>
         ))}
       </SectionCardGroup>
-      {items.length === 0 && <Card><Typography.Text type="secondary">还没有案例，请点击“新增案例”。</Typography.Text></Card>}
+      {normalizedItems.length === 0 && <Card><Typography.Text type="secondary">还没有案例，请点击“新增案例”。</Typography.Text></Card>}
     </div>
   );
 }

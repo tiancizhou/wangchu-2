@@ -404,12 +404,14 @@
 .project-cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px 28px;margin-top:12px}
 .project-case-card{background:#fff;overflow:hidden;transition:transform .25s ease}
 .project-case-card:hover{transform:translateY(-4px)}
-.project-case-image{aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,#e8eaee,#d0d4da)}
+.project-case-image{aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,#e8eaee,#d0d4da);display:block}
 .project-case-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
 .project-case-card:hover .project-case-image img{transform:scale(1.05)}
 .project-case-fallback{width:100%;height:100%;background:linear-gradient(135deg,#eef2f7,#d5dce8);display:grid;place-items:center;color:#b0b8c4;font-size:48px;font-weight:800}
 .project-case-text{padding:16px 12px 6px;text-align:center}
+.project-case-text a{color:inherit;text-decoration:none}
 .project-case-text h3{margin:0 0 6px;font-size:17px;font-weight:700;color:#333}
+.project-case-text a:hover h3{color:#225ba1}
 .project-case-text p{margin:0;font-size:13px;color:#999;line-height:1.6}
 @media(max-width:900px){.project-cases-grid{grid-template-columns:repeat(2,1fr);gap:20px 18px}}
 

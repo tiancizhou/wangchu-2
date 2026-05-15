@@ -13,6 +13,7 @@ import { HomePage } from './pages/HomePage';
 import { LegalPage } from './pages/LegalPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { ProcessDetailPage } from './pages/ProcessDetailPage';
+import { ProjectCaseDetailPage } from './pages/ProjectCaseDetailPage';
 import { ProductsPage } from './pages/ProductsPage';
 import { SupportDetailPage } from './pages/SupportDetailPage';
 import { SupportPage } from './pages/SupportPage';
@@ -42,7 +43,8 @@ const router = createBrowserRouter([
       { path: 'benefits/:slug', element: <BenefitDetailPage /> },
       { path: 'support', element: <SupportPage /> },
       { path: 'support/:slug', element: <SupportDetailPage /> },
-      { path: 'process/:slug', element: <ProcessDetailPage /> }
+      { path: 'process/:slug', element: <ProcessDetailPage /> },
+      { path: 'project-cases/:slug', element: <ProjectCaseDetailPage /> }
     ]
   },
   {

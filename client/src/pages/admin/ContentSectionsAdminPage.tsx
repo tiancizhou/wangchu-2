@@ -127,7 +127,7 @@ export function ContentSectionsAdminPage({ config = homeContentConfig }: { confi
   }
 
   function updateProjectCase(index: number, patch: Partial<ProjectCaseItem>) {
-    const items = [...(((editing?.data.items || []) as ProjectCaseItem[]))];
+    const items = [...(((editing?.data.items || []) as ProjectCaseItem[]))].map(({ description, ...item }) => ({ ...item, subtitle: item.subtitle || description || '' }));
     items[index] = { ...items[index], ...patch };
     setData({ items });
   }
@@ -197,7 +197,7 @@ export function ContentSectionsAdminPage({ config = homeContentConfig }: { confi
                   {editing.sectionKey === 'contactInfo' && <ContactInfoEditor data={editing.data as ContactInfoData} onChange={setData} />}
                   {editing.sectionKey === 'legalStatement' && <LegalStatementEditor data={editing.data as LegalStatementData} onChange={setData} />}
                   {editing.sectionKey === 'certificatePreview' && <Card><Typography.Paragraph type="secondary">荣誉资质图片请在"荣誉资质"管理中上传和排序。此处仅编辑模块标题和显示状态。</Typography.Paragraph></Card>}
-                  {editing.sectionKey === 'projectCases' && <ProjectCasesEditor items={(editing.data.items || []) as ProjectCaseItem[]} onUpdate={updateProjectCase} onChange={(items) => setData({ items })} />}
+                  {editing.sectionKey === 'projectCases' && <ProjectCasesEditor items={(editing.data.items || []) as ProjectCaseItem[]} onUpdate={updateProjectCase} onChange={(items) => setData({ items: items.map(({ description, ...item }) => ({ ...item, subtitle: item.subtitle || description || '' })) })} />}
                   <Card><Space><Button type="primary" htmlType="submit" loading={saving}>{saving ? '保存中...' : (config.saveButtonText || '保存内容')}</Button><Typography.Text type={dirty ? 'warning' : 'success'}>{dirty ? '有未保存的修改' : '当前内容已保存'}</Typography.Text></Space></Card>
                 </Space>
               </form>

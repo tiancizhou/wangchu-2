@@ -20,6 +20,7 @@ const featureDetailLinks: Record<string, string> = {
 const legacyFeatureLinks = new Set(['/consult', '/certificates', '/products']);
 const supportDetailLinks = ['/support/production-blending', '/support/lab-testing', '/support/quality-inspection'];
 const processDetailLinks = ['/process/filling-line', '/process/equipment-management', '/process/equipment', '/process/warehouse'];
+const projectCaseDetailLinks = ['/project-cases/automotive-lubricants', '/project-cases/industrial-lubricants', '/project-cases/special-oil-development', '/project-cases/brand-customization', '/project-cases/thermal-oil', '/project-cases/synthetic-grease'];
 
 function processDetailLink(item: ProcessItem | undefined, index: number) {
   return item?.linkUrl || processDetailLinks[index] || processDetailLinks[0];
@@ -27,6 +28,10 @@ function processDetailLink(item: ProcessItem | undefined, index: number) {
 
 function supportDetailLink(tab: SupportTab | undefined, index: number) {
   return tab?.linkUrl || supportDetailLinks[index] || supportDetailLinks[0];
+}
+
+function projectCaseDetailLink(index: number) {
+  return projectCaseDetailLinks[index] || projectCaseDetailLinks[0];
 }
 
 function featureCardLink(item: FeatureCard) {
@@ -337,14 +342,14 @@ export function AboutPreview({ section, companyName }: { section?: ContentSectio
 }
 
 export function ProjectCases({ section }: { section?: ContentSection }) {
-  type ProjectCaseItem = { title?: string; description?: string; imageUrl?: string };
+  type ProjectCaseItem = { title?: string; subtitle?: string; description?: string; imageUrl?: string };
   const items = (section?.data.items as ProjectCaseItem[] | undefined) || [
-    { title: '汽车润滑油项目', description: '为汽车行业提供高性能润滑油解决方案' },
-    { title: '工业润滑油项目', description: '工业设备润滑维护一站式服务' },
-    { title: '特种油品研发', description: '针对特殊场景定制研发油品' },
-    { title: '品牌定制服务', description: '成熟的品牌定制与产品包装方案' },
-    { title: '导热油项目', description: '高温导热油应用解决方案' },
-    { title: '合成油脂项目', description: '高性能合成油脂研发与生产' }
+    { title: '汽车润滑油项目', subtitle: '为汽车行业提供高性能润滑油解决方案' },
+    { title: '工业润滑油项目', subtitle: '工业设备润滑维护一站式服务' },
+    { title: '特种油品研发', subtitle: '针对特殊场景定制研发油品' },
+    { title: '品牌定制服务', subtitle: '成熟的品牌定制与产品包装方案' },
+    { title: '导热油项目', subtitle: '高温导热油应用解决方案' },
+    { title: '合成油脂项目', subtitle: '高性能合成油脂研发与生产' }
   ];
 
   return (
@@ -352,17 +357,20 @@ export function ProjectCases({ section }: { section?: ContentSection }) {
       <div className="container">
         <SectionTitle title={section?.title || '项目案例'} subtitle={section?.subtitle} />
         <div className="project-cases-grid">
-          {items.map((item, index) => (
-            <article className="project-case-card" key={item.title || index}>
-              <div className="project-case-image">
-                {item.imageUrl ? <img src={item.imageUrl} alt={item.title} /> : <div className="project-case-fallback" />}
-              </div>
-              <div className="project-case-text">
-                <h3>{item.title}</h3>
-                {item.description && <p>{item.description}</p>}
-              </div>
-            </article>
-          ))}
+          {items.map((item, index) => {
+            const detailLink = projectCaseDetailLink(index);
+            return (
+              <article className="project-case-card" key={item.title || index}>
+                <Link className="project-case-image" to={detailLink}>
+                  {item.imageUrl ? <img src={item.imageUrl} alt={item.title} /> : <div className="project-case-fallback" />}
+                </Link>
+                <div className="project-case-text">
+                  <Link to={detailLink}><h3>{item.title}</h3></Link>
+                  {(item.subtitle || item.description) && <p>{item.subtitle || item.description}</p>}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
