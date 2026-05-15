@@ -252,7 +252,7 @@ export function ProcessModule({ section }: { section?: ContentSection }) {
   }, [items.length]);
 
   return (
-    <section className="factory-section" style={data?.backgroundImageUrl ? { backgroundImage: `linear-gradient(rgba(15,43,78,.78),rgba(15,43,78,.84)),url(${data.backgroundImageUrl})` } : undefined}>
+    <section className="factory-section" id="process" style={data?.backgroundImageUrl ? { backgroundImage: `linear-gradient(rgba(15,43,78,.78),rgba(15,43,78,.84)),url(${data.backgroundImageUrl})` } : undefined}>
       <SectionTitle title={section?.title || '生产与智造'} subtitle={section?.subtitle} light />
       <div className="factory-card">
         <div className="factory-showcase">
@@ -345,7 +345,7 @@ export function ProjectCases({ section }: { section?: ContentSection }) {
   ];
 
   return (
-    <section className="section project-cases-section">
+    <section className="section project-cases-section" id="project-cases">
       <div className="container">
         <SectionTitle title={section?.title || '项目案例'} subtitle={section?.subtitle} />
         <div className="project-cases-grid">

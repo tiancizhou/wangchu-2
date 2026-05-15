@@ -419,11 +419,11 @@ async function main() {
   if (navCount === 0) {
     await prisma.navigationItem.createMany({
       data: [
-        { label: '首页', url: '/', sortOrder: 1 },
-        { label: '产品中心', url: '/products', sortOrder: 2 },
-        { label: '技术支持', url: '/support', sortOrder: 3 },
-        { label: '渠道合作', url: '/consult', sortOrder: 4 },
-        { label: '关于我们', url: '/about', sortOrder: 5 }
+        { label: '关于我们', url: '/about', sortOrder: 1 },
+        { label: '产品与项目分类', url: '/products', sortOrder: 2 },
+        { label: '生产与智造', url: '/#process', sortOrder: 3 },
+        { label: '项目案例', url: '/#project-cases', sortOrder: 4 },
+        { label: '联系我们', url: '/contact', sortOrder: 5 }
       ]
     });
   }

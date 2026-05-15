@@ -36,16 +36,19 @@ const fallbackProfile: SiteProfile = {
 const publicViewport = 'width=1200';
 
 const fallbackNavigation: NavigationItem[] = [
-  { id: 'home', label: '首页', url: '/', sortOrder: 1, isVisible: true, openInNewTab: false },
-  { id: 'products', label: '产品中心', url: '/products', sortOrder: 2, isVisible: true, openInNewTab: false },
-  { id: 'support', label: '技术支持', url: '/support', sortOrder: 3, isVisible: true, openInNewTab: false },
-  { id: 'consult', label: '渠道合作', url: '/consult', sortOrder: 4, isVisible: true, openInNewTab: false },
-  { id: 'about', label: '关于我们', url: '/about', sortOrder: 5, isVisible: true, openInNewTab: false }
+  { id: 'about', label: '关于我们', url: '/about', sortOrder: 1, isVisible: true, openInNewTab: false },
+  { id: 'products', label: '产品与项目分类', url: '/products', sortOrder: 2, isVisible: true, openInNewTab: false },
+  { id: 'process', label: '生产与智造', url: '/#process', sortOrder: 3, isVisible: true, openInNewTab: false },
+  { id: 'project-cases', label: '项目案例', url: '/#project-cases', sortOrder: 4, isVisible: true, openInNewTab: false },
+  { id: 'contact', label: '联系我们', url: '/contact', sortOrder: 5, isVisible: true, openInNewTab: false }
 ];
 
-function normalizeNavigationItem(item: NavigationItem): NavigationItem {
-  if (item.label === '技术支持' && item.url === '/#support') return { ...item, url: '/support' };
-  return item.label === '关于我们' && item.url === '/#about' ? { ...item, url: '/about' } : item;
+function normalizeNavigation(items: NavigationItem[]): NavigationItem[] {
+  const byLabel = new Map(items.map((item) => [item.label, item]));
+  return fallbackNavigation.map((target) => {
+    const existing = byLabel.get(target.label);
+    return existing ? { ...existing, label: target.label, url: target.url, sortOrder: target.sortOrder } : target;
+  });
 }
 
 function normalizeHref(url?: string) {
@@ -79,7 +82,7 @@ export function PublicLayout() {
     const viewport = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
     if (viewport) viewport.content = publicViewport;
     getSiteProfile().then((data) => data && setProfile(data)).catch(() => {});
-    getNavigation().then((items) => items.length > 0 && setNavigation(items.map(normalizeNavigationItem))).catch(() => {});
+    getNavigation().then((items) => items.length > 0 && setNavigation(normalizeNavigation(items))).catch(() => {});
   }, []);
 
   useEffect(() => {
