@@ -37,6 +37,24 @@ if not exist "server\data" (
   mkdir "server\data"
 )
 
+set "APP_PORT=4000"
+for /f "usebackq tokens=1,* delims==" %%A in ("server\.env") do (
+  if /i "%%A"=="PORT" set "APP_PORT=%%B"
+)
+
+echo [INFO] Releasing occupied development ports...
+for %%P in (%APP_PORT% 24678) do (
+  for /f "tokens=5" %%I in ('netstat -ano ^| findstr /R /C:":%%P .*LISTENING"') do (
+    for /f "tokens=2 delims==" %%C in ('wmic process where "ProcessId=%%I" get CommandLine /value 2^>nul ^| findstr "CommandLine="') do (
+      echo %%C | findstr /I /C:"%CD%" >nul
+      if not errorlevel 1 (
+        echo [INFO] Stopping existing project process %%I on port %%P...
+        taskkill /PID %%I /F >nul 2>nul
+      )
+    )
+  )
+)
+
 if not exist "node_modules" (
   echo [INFO] Installing dependencies...
   call npm install
@@ -65,9 +83,9 @@ if errorlevel 1 (
 
 echo.
 echo ========================================
-echo   Website: http://localhost:4000/
-echo   Admin:   http://localhost:4000/admin
-echo   API:     http://localhost:4000/api/health
+echo   Website: http://localhost:%APP_PORT%/
+echo   Admin:   http://localhost:%APP_PORT%/admin
+echo   API:     http://localhost:%APP_PORT%/api/health
 echo.
 echo   Default admin account is configured in server\.env
 echo ========================================
