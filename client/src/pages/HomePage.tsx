@@ -253,12 +253,12 @@ export function ProcessModule({ section }: { section?: ContentSection }) {
 
   return (
     <section className="factory-section" style={data?.backgroundImageUrl ? { backgroundImage: `linear-gradient(rgba(15,43,78,.78),rgba(15,43,78,.84)),url(${data.backgroundImageUrl})` } : undefined}>
-      <SectionTitle title={section?.title || '先进的制作工艺'} subtitle={section?.subtitle} light />
+      <SectionTitle title={section?.title || '生产与智造'} subtitle={section?.subtitle} light />
       <div className="factory-card">
         <div className="factory-showcase">
           <aside>{items.map((item, index) => <button className={index === activeIndex ? 'active' : ''} type="button" onClick={() => setActiveIndex(index)} key={item.title}><FactoryMenuIcon index={index} /><span>{item.title}</span></button>)}</aside>
           <div className="factory-photo">
-            {active?.imageUrl && <Link className="home-preview-image-button ratio-3-2" to={activeDetailLink}><img src={active.imageUrl} alt={active.title || '先进的制作工艺'} /></Link>}
+            {active?.imageUrl && <Link className="home-preview-image-button ratio-3-2" to={activeDetailLink}><img src={active.imageUrl} alt={active.title || '生产与智造'} /></Link>}
           </div>
         </div>
         <article className="factory-copy"><h3>{active?.title}</h3><p>{active?.description}</p></article>
@@ -266,7 +266,7 @@ export function ProcessModule({ section }: { section?: ContentSection }) {
         <div className="factory-thumb-grid">
           {Array.from({ length: 4 }).map((_, index) => {
             const galleryImage = activeGalleryImages[index];
-            const fallbackTitle = active?.title || '先进的制作工艺';
+            const fallbackTitle = active?.title || '生产与智造';
             const imageUrl = galleryImage ? getGalleryImageUrl(galleryImage) : '';
             const title = galleryImage ? getGalleryImageTitle(galleryImage, fallbackTitle) : fallbackTitle;
             return (

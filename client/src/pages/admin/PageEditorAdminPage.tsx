@@ -140,22 +140,22 @@ const pageConfigs: Record<string, PageEditorConfig> = {
     }
   },
   process: {
-    title: '先进的制作工艺',
+    title: '生产与智造',
     publicLocation: '/#process',
     description: '',
     tools: [],
     hideHeroDetails: true,
     contentConfig: {
       pageKey: 'home',
-      title: '先进的制作工艺',
+      title: '生产与智造',
       description: '',
       editableKeys: ['processModule'],
       moduleHelp: {
-        processModule: '显示在首页“先进的制作工艺”区域，用于介绍制作工艺和设备能力。'
+        processModule: '显示在首页“生产与智造”区域，用于介绍制作工艺和设备能力。'
       },
-      loadingText: '先进的制作工艺加载中...',
-      saveSuccessText: '先进的制作工艺已保存',
-      saveButtonText: '保存先进的制作工艺',
+      loadingText: '生产与智造加载中...',
+      saveSuccessText: '生产与智造已保存',
+      saveButtonText: '保存生产与智造',
       hideModuleSelector: true,
       hidePublishSwitch: true,
       hideBaseSettings: false,

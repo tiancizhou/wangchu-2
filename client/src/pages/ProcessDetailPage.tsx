@@ -29,12 +29,12 @@ export function ProcessDetailPage() {
 
   const items = section?.data.items?.length ? section.data.items : fallbackItems;
   const item = items.find((entry, index) => (entry.linkUrl || fallbackLink(index)) === `/process/${slug}`) || items[0] || fallbackItems[0];
-  const title = item.title || '先进的制作工艺';
-  const paragraphs = item.sections?.[0]?.paragraphs?.length ? item.sections[0].paragraphs : [item.description || '这里填写先进的制作工艺详情内容，可在后台维护正文内容。'];
+  const title = item.title || '生产与智造';
+  const paragraphs = item.sections?.[0]?.paragraphs?.length ? item.sections[0].paragraphs : [item.description || '这里填写生产与智造详情内容，可在后台维护正文内容。'];
 
   return (
     <main className="gray-page legal-page about-page">
-      <div className="breadcrumb container">当前位置：<Link to="/">首页</Link> › <Link to="/#process">先进的制作工艺</Link></div>
+      <div className="breadcrumb container">当前位置：<Link to="/">首页</Link> › <Link to="/#process">生产与智造</Link></div>
       <section className="content-card container legal-content about-content">
         <article className="rich-text-placeholder legal-statement-document about-rich-text">
           <h1>{title}</h1>

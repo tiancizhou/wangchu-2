@@ -51,7 +51,7 @@ export type SectionData = {
 export const sectionNames: Record<string, string> = {
   featureCards: '企业管理模块',
   supportModule: '生产设计与制作',
-  processModule: '先进的制作工艺',
+  processModule: '生产与智造',
   aboutPreview: '关于我们',
   advantages: '加盟优势',
   benefits: '加盟福利',

@@ -185,7 +185,7 @@ const contentSections = [
   {
     pageKey: 'home',
     sectionKey: 'processModule',
-    title: '先进的制作工艺',
+    title: '生产与智造',
     subtitle: '桔尔润（北京）润滑油有限公司',
     data: {
       items: [
