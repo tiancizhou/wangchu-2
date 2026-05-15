@@ -459,9 +459,9 @@
   .public-site-home .about-preview-section{
     position:relative;
     isolation:isolate;
-    margin-top:-152px;
-    padding:0 0 82px;
-    background:linear-gradient(180deg,transparent 0,transparent 88px,#fff 88px,#fff 248px,#f4f4f4 248px,#f4f4f4 100%);
+    margin-top:-72px;
+    padding:0 0 64px;
+    background:linear-gradient(180deg,transparent 0,transparent 36px,#fff 36px,#fff 214px,#f4f4f4 214px,#f4f4f4 100%);
     z-index:40;
   }
   .public-site-home .about-preview-section::before{
@@ -469,112 +469,64 @@
     position:absolute;
     left:0;
     right:0;
-    top:248px;
+    top:214px;
     bottom:0;
     background:#f4f4f4;
-    box-shadow:inset 0 16px 28px rgba(15,23,42,.025);
+    box-shadow:inset 0 14px 24px rgba(15,23,42,.025);
     z-index:-1;
   }
   .public-site-home .about-preview-card-shell{
-    width:900px;
-    max-width:calc(100% - 112px);
-    padding:42px 18px 26px;
+    width:1200px;
+    max-width:calc(100% - 40px);
+    padding:34px 18px 20px;
     background:#fff;
-    box-shadow:0 4px 10px rgba(15,23,42,.08),0 18px 34px rgba(15,23,42,.08);
-    border:1px solid rgba(15,23,42,.03);
+    border:1px solid rgba(15,23,42,.035);
+    box-shadow:0 3px 8px rgba(15,23,42,.07),0 12px 24px rgba(15,23,42,.08);
     z-index:3;
   }
   .public-site-home .about-preview-card-shell::after{
     content:'';
     position:absolute;
-    left:18px;
-    right:18px;
-    bottom:-13px;
-    height:13px;
-    background:linear-gradient(180deg,rgba(15,23,42,.08),rgba(15,23,42,0));
-    filter:blur(8px);
-    pointer-events:none;
-  }
-  .public-site-home .about-preview-features{
-    position:relative;
-    z-index:2;
-    width:900px;
-    max-width:calc(100% - 112px);
-    margin:56px auto 0;
-    padding:0 18px;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:62px;
-  }
-  .public-site-home .about-preview-feature{
-    grid-template-columns:66px minmax(0,1fr);
-    gap:16px;
-    align-items:center;
-  }
-  .public-site-home .about-preview-icon,
-  .public-site-home .about-preview-feature-svg{
-    width:58px;
-    height:58px;
-  }
-  .public-site-home .about-preview-feature p{
-    font-size:12px;
-    line-height:1.72;
-    color:#3f4650;
-  }
-  .public-site-home .product-category-section{
-    position:relative;
-    z-index:1;
-    padding-top:48px;
-    background:#fff;
-  }
-}
-
-
-/* homepage about layered ratio refinement */
-@media(min-width:901px){
-  .public-site-home .about-preview-section{
-    margin-top:-138px;
-    padding:0 0 62px;
-    background:linear-gradient(180deg,transparent 0,transparent 72px,#fff 72px,#fff 222px,#f4f4f4 222px,#f4f4f4 100%);
-  }
-  .public-site-home .about-preview-section::before{
-    top:222px;
-  }
-  .public-site-home .about-preview-card-shell{
-    width:750px;
-    max-width:calc(100% - 112px);
-    padding:34px 14px 18px;
-    box-shadow:0 3px 8px rgba(15,23,42,.07),0 12px 24px rgba(15,23,42,.08);
-  }
-  .public-site-home .about-preview-card-shell::after{
     left:28px;
     right:28px;
     bottom:-10px;
     height:10px;
+    background:linear-gradient(180deg,rgba(15,23,42,.08),rgba(15,23,42,0));
     filter:blur(7px);
+    pointer-events:none;
   }
   .public-site-home .about-preview-header{
-    margin:0 14px 34px;
+    margin:0 18px 38px;
   }
   .public-site-home .about-preview-header h2{
+    margin:0 0 10px;
     font-size:18px;
-    margin-bottom:10px;
+    line-height:1.2;
   }
   .public-site-home .about-preview-header p{
     font-size:10px;
+    line-height:1.5;
   }
   .public-site-home .about-preview-gallery{
-    gap:18px;
+    gap:30px;
+  }
+  .public-site-home .about-preview-photo{
+    aspect-ratio:200/248;
   }
   .public-site-home .about-preview-features{
-    width:750px;
-    max-width:calc(100% - 112px);
-    margin:48px auto 0;
+    position:relative;
+    z-index:2;
+    width:1200px;
+    max-width:calc(100% - 40px);
+    margin:54px auto 0;
     padding:0 18px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
     gap:58px;
   }
   .public-site-home .about-preview-feature{
     grid-template-columns:52px minmax(0,1fr);
     gap:14px;
+    align-items:center;
   }
   .public-site-home .about-preview-icon,
   .public-site-home .about-preview-feature-svg{
@@ -584,9 +536,13 @@
   .public-site-home .about-preview-feature p{
     font-size:11px;
     line-height:1.66;
+    color:#3f4650;
   }
   .public-site-home .product-category-section{
+    position:relative;
+    z-index:1;
     padding-top:46px;
+    background:#fff;
   }
 }
 
