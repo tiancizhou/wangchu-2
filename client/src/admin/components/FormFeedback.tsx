@@ -11,7 +11,7 @@ export function useFormFeedback() {
 
   const renderStatusBar = useCallback(() => {
     return (
-      <span style={{ fontSize: 12, color: dirty ? '#f59e0b' : '#22c55e' }}>
+      <span className={dirty ? 'admin-status-dirty' : 'admin-status-saved'}>
         {dirty ? '有未保存的修改' : '当前内容已保存'}
       </span>
     );

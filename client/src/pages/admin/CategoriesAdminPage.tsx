@@ -97,7 +97,7 @@ export function CategoriesAdminPage({ embedded = false }: CategoriesAdminPagePro
               getItemId={(category) => category.id}
               onReorder={reorderCategories}
               renderItem={(category, index, dragHandle) => (
-                <Card size="small" onClick={() => setEditing(category)} style={{ cursor: 'pointer', borderColor: editing.id === category.id ? '#1677ff' : undefined }}>
+                <Card size="small" onClick={() => setEditing(category)} style={{ cursor: 'pointer', borderColor: editing.id === category.id ? 'var(--bp-amber)' : undefined }}>
                   <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
                     <Space><DragHandle dragHandle={dragHandle} /><Typography.Text>{index + 1}</Typography.Text><div><Typography.Text strong>{category.name}</Typography.Text><br /><Typography.Text type="secondary" style={{ fontSize: 12 }}>{category.slug || '未填写链接标识'}</Typography.Text></div></Space>
                     <Tag color={category.isPublished ? 'success' : 'default'}>{category.isPublished ? '显示' : '隐藏'}</Tag>

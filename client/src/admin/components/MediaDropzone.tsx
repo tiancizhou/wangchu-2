@@ -131,9 +131,9 @@ export function MediaDropzone({ value, onChange, multiple = false, onMultipleCha
   if (value && !multiple) {
     const isVideo = VIDEO_PATTERN.test(value);
     return (
-      <div style={{ position: 'relative', display: 'inline-block', borderRadius: 10, overflow: 'hidden', border: '1px solid #eef2f8' }}>
+      <div className="admin-dropzone-preview">
         {isVideo ? <video src={value} controls muted playsInline style={{ maxHeight: 200 }} /> : <img src={value} alt="已上传" style={{ maxHeight: 200, objectFit: 'contain' }} />}
-        <div style={{ position: 'absolute', right: 8, top: 8, display: 'flex', gap: 8 }}>
+        <div className="admin-dropzone-actions">
           <Upload beforeUpload={beforeUpload} customRequest={customRequest} accept={accept} showUploadList={false} multiple={false}>
             <Button size="small">替换</Button>
           </Upload>
@@ -147,9 +147,9 @@ export function MediaDropzone({ value, onChange, multiple = false, onMultipleCha
   return (
     <>
       <Upload.Dragger name="file" multiple={multiple} accept={accept} showUploadList={false} beforeUpload={beforeUpload} customRequest={customRequest} style={{ padding: 16 }}>
-        <p style={{ fontSize: 32, color: '#94a3b8', margin: 0 }}><InboxOutlined /></p>
+        <p className="admin-dropzone-icon"><InboxOutlined /></p>
         <p style={{ margin: '8px 0 4px', fontSize: 14 }}>拖拽上传或点击选择文件</p>
-        <p style={{ margin: 0, fontSize: 12, color: '#94a3b8' }}>{hint || defaultHint}</p>
+        <p className="admin-dropzone-hint">{hint || defaultHint}</p>
         {progress !== null && <Progress percent={progress} size="small" style={{ marginTop: 8 }} />}
       </Upload.Dragger>
       {targetCropSize && <ImageCropModal file={cropFile} cropSize={targetCropSize} open={Boolean(cropFile)} onCancel={() => { setCropFile(null); setPendingFiles([]); }} onConfirm={confirmCrop} />}

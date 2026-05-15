@@ -3,7 +3,7 @@ import type { TableProps } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useMemo, useState, type ReactNode } from 'react';
 
-type Props<T> = {
+type Props<T extends object> = {
   columns: TableProps<T>['columns'];
   data: T[];
   rowKey: keyof T | ((record: T) => string);
@@ -30,7 +30,7 @@ export function SearchableTable<T extends object>({ columns, data, rowKey, searc
 
   return (
     <Space direction="vertical" size={12} style={{ width: '100%' }}>
-      <Space wrap style={{ justifyContent: 'space-between', width: '100%' }}>
+      <Space wrap className="admin-search-toolbar">
         {searchableKeys && searchableKeys.length > 0 ? (
           <Input
             allowClear
@@ -38,7 +38,7 @@ export function SearchableTable<T extends object>({ columns, data, rowKey, searc
             placeholder={searchPlaceholder}
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            style={{ width: 260 }}
+            className="admin-search-input"
           />
         ) : <span />}
         {toolbar}
@@ -54,7 +54,7 @@ export function SearchableTable<T extends object>({ columns, data, rowKey, searc
           scroll={{ x: 'max-content' }}
         />
       )}
-      {filtered.length > 0 && <Typography.Text type="secondary" style={{ fontSize: 12 }}>共 {filtered.length} 条</Typography.Text>}
+      {filtered.length > 0 && <Typography.Text type="secondary" className="admin-search-count">共 {filtered.length} 条</Typography.Text>}
     </Space>
   );
 }

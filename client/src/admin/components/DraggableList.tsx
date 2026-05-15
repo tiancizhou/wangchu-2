@@ -56,7 +56,7 @@ export function DraggableList<T>({ items, getItemId, onReorder, renderItem, cont
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={ids} strategy={strategy}>
-        <div style={containerStyle || { display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={containerStyle} className={!containerStyle ? 'admin-drag-container' : undefined}>
           {items.map((item, index) => (
             <Row key={getItemId(item)} item={item} index={index} id={getItemId(item)} renderItem={renderItem} rowStyle={rowStyle} />
           ))}
@@ -68,7 +68,7 @@ export function DraggableList<T>({ items, getItemId, onReorder, renderItem, cont
 
 export function DragHandle({ dragHandle }: { dragHandle: DragHandleProps }) {
   return (
-    <span ref={dragHandle.ref} {...dragHandle.attributes} {...dragHandle.listeners} style={{ cursor: 'grab', color: '#94a3b8', display: 'inline-flex', alignItems: 'center', padding: 4 }}>
+    <span ref={dragHandle.ref} {...dragHandle.attributes} {...dragHandle.listeners} className="admin-drag-handle">
       <HolderOutlined />
     </span>
   );

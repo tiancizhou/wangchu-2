@@ -1,4 +1,4 @@
-import { Card, Col, Row, Typography } from 'antd';
+import { Typography } from 'antd';
 import {
   PictureOutlined,
   AppstoreOutlined,
@@ -7,7 +7,7 @@ import {
   MessageOutlined,
   BankOutlined,
   ShoppingOutlined,
-  RightOutlined
+  RightOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -20,50 +20,48 @@ const contentEntries: Entry[] = [
   { to: '/admin/page/process', title: '生产与智造', description: '编辑生产与智造区域的背景图、项目图片和说明。', icon: <BulbOutlined /> },
   { to: '/admin/page/project-cases', title: '项目案例', description: '编辑首页项目案例图片、标题和说明。', icon: <AppstoreOutlined /> },
   { to: '/admin/page/contact', title: '联系我们', description: '编辑联系我们页面的联系信息和地图图片。', icon: <MessageOutlined /> },
-  { to: '/admin/site', title: '页脚', description: '维护页脚公司信息、联系方式、友情链接和备案信息。', icon: <BankOutlined /> }
+  { to: '/admin/site', title: '页脚', description: '维护页脚公司信息、联系方式、友情链接和备案信息。', icon: <BankOutlined /> },
 ];
 
 const dataEntries: Entry[] = [
-  { to: '/admin/products', title: '产品管理', description: '统一管理产品列表、产品详情、分类入口、排序和发布状态。', icon: <ShoppingOutlined /> }
+  { to: '/admin/products', title: '产品管理', description: '统一管理产品列表、产品详情、分类入口、排序和发布状态。', icon: <ShoppingOutlined /> },
 ];
 
-function EntryGrid({ entries }: { entries: Entry[] }) {
+function EntryCard({ entry, index }: { entry: Entry; index: number }) {
   return (
-    <Row gutter={[16, 16]}>
-      {entries.map((entry) => (
-        <Col xs={24} sm={12} lg={8} xxl={6} key={entry.to}>
-          <Link to={entry.to} style={{ display: 'block' }}>
-            <Card hoverable style={{ height: '100%' }} styles={{ body: { display: 'flex', gap: 12, alignItems: 'flex-start' } }}>
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(22, 119, 255, 0.08)', color: '#1677ff', display: 'grid', placeItems: 'center', fontSize: 18, flex: 'none' }}>{entry.icon}</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-                  <Typography.Text strong>{entry.title}</Typography.Text>
-                  <RightOutlined style={{ color: '#94a3b8' }} />
-                </div>
-                <Typography.Paragraph type="secondary" style={{ marginBottom: 0, marginTop: 4 }} ellipsis={{ rows: 2 }}>{entry.description}</Typography.Paragraph>
-              </div>
-            </Card>
-          </Link>
-        </Col>
-      ))}
-    </Row>
+    <Link to={entry.to} className="dash-card" style={{ animationDelay: `${index * 40}ms` }}>
+      <div className="dash-card-icon">{entry.icon}</div>
+      <div className="dash-card-body">
+        <div className="dash-card-head">
+          <span className="dash-card-title">{entry.title}</span>
+          <RightOutlined className="dash-card-arrow" />
+        </div>
+        <span className="dash-card-desc">{entry.description}</span>
+      </div>
+    </Link>
   );
 }
 
 export function DashboardPage() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div>
-        <Typography.Title level={3} style={{ marginBottom: 4 }}>编辑目录</Typography.Title>
-        <Typography.Text type="secondary">从下方选择要编辑的网站内容模块，每个入口对应一个前台可见的页面或区域。</Typography.Text>
-      </div>
-      <section>
-        <Typography.Title level={5} style={{ marginBottom: 12 }}>内容编辑</Typography.Title>
-        <EntryGrid entries={contentEntries} />
+    <div className="dash-page">
+      <header className="dash-header">
+        <Typography.Title level={3} className="dash-title">编辑目录</Typography.Title>
+        <p className="dash-subtitle">从下方选择要编辑的网站内容模块，每个入口对应一个前台可见的页面或区域。</p>
+      </header>
+
+      <section className="dash-section">
+        <h4 className="dash-section-label">内容编辑</h4>
+        <div className="dash-grid">
+          {contentEntries.map((entry, i) => <EntryCard entry={entry} key={entry.to} index={i} />)}
+        </div>
       </section>
-      <section>
-        <Typography.Title level={5} style={{ marginBottom: 12 }}>数据管理</Typography.Title>
-        <EntryGrid entries={dataEntries} />
+
+      <section className="dash-section">
+        <h4 className="dash-section-label">数据管理</h4>
+        <div className="dash-grid">
+          {dataEntries.map((entry, i) => <EntryCard entry={entry} key={entry.to} index={i + contentEntries.length} />)}
+        </div>
       </section>
     </div>
   );

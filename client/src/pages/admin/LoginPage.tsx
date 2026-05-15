@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { App, Button, Card, Form, Input, Typography } from 'antd';
+import { App, Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/adminApi';
 
@@ -23,20 +23,28 @@ export function LoginPage() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, background: 'linear-gradient(135deg, #eef4ff 0%, #f8fafc 50%, #edf7ff 100%)' }}>
-      <Card style={{ width: '100%', maxWidth: 420, boxShadow: '0 18px 45px rgba(15, 23, 42, 0.12)' }}>
-        <Typography.Title level={3} style={{ marginTop: 0, textAlign: 'center' }}>官网后台登录</Typography.Title>
-        <Typography.Paragraph type="secondary" style={{ textAlign: 'center' }}>请输入管理员账号和密码进入管理后台。</Typography.Paragraph>
-        <Form layout="vertical" initialValues={{ username: 'admin', password: 'admin123456' }} onFinish={onSubmit}>
-          <Form.Item name="username" label="账号" rules={[{ required: true, message: '请输入账号' }]}>
+    <main className="login-page">
+      <div className="login-grid-overlay" />
+      <div className="login-card">
+        <div className="login-brand">
+          <div className="login-brand-icon">W</div>
+          <div>
+            <h1>官网后台</h1>
+            <p>Blueprint Management Console</p>
+          </div>
+        </div>
+        <Form layout="vertical" initialValues={{ username: 'admin', password: 'admin123456' }} onFinish={onSubmit} className="login-form">
+          <Form.Item name="username" label={<span className="login-label">账号</span>} rules={[{ required: true, message: '请输入账号' }]}>
             <Input prefix={<UserOutlined />} placeholder="账号" autoComplete="username" />
           </Form.Item>
-          <Form.Item name="password" label="密码" rules={[{ required: true, message: '请输入密码' }]}>
+          <Form.Item name="password" label={<span className="login-label">密码</span>} rules={[{ required: true, message: '请输入密码' }]}>
             <Input.Password prefix={<LockOutlined />} placeholder="密码" autoComplete="current-password" />
           </Form.Item>
-          <Button type="primary" htmlType="submit" block size="large">登录</Button>
+          <Button type="primary" htmlType="submit" block size="large" className="login-submit">
+            进入后台
+          </Button>
         </Form>
-      </Card>
+      </div>
     </main>
   );
 }

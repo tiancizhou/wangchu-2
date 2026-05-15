@@ -83,7 +83,7 @@ export function ImageCropModal({ file, cropSize, open, onCancel, onConfirm }: Pr
   return (
     <Modal title={`裁剪${cropSize.label}`} open={open} onCancel={onCancel} onOk={confirmCrop} okText="确认裁剪并上传" cancelText="取消" confirmLoading={saving} width={760} destroyOnClose>
       <Typography.Paragraph type="secondary">输出尺寸：{formatCropSize(cropSize)}。请拖动图片并调整缩放，确认后会按该尺寸上传。</Typography.Paragraph>
-      <div style={{ position: 'relative', height: 420, background: '#111', borderRadius: 10, overflow: 'hidden' }}>
+      <div className="admin-crop-area">
         {imageUrl && (
           <Cropper
             image={imageUrl}
@@ -96,7 +96,7 @@ export function ImageCropModal({ file, cropSize, open, onCancel, onConfirm }: Pr
           />
         )}
       </div>
-      <div style={{ marginTop: 18 }}>
+      <div className="admin-crop-zoom">
         <Typography.Text type="secondary">缩放</Typography.Text>
         <Slider min={1} max={3} step={0.01} value={zoom} onChange={setZoom} />
       </div>

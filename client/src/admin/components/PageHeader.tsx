@@ -11,12 +11,12 @@ type Props = {
 
 export function PageHeader({ title, description, publicLocation, extra }: Props) {
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
-      <div style={{ flex: 1, minWidth: 240 }}>
-        <Typography.Title level={3} style={{ margin: 0 }}>{title}</Typography.Title>
-        {description && <Typography.Paragraph type="secondary" style={{ marginTop: 6, marginBottom: 0 }}>{description}</Typography.Paragraph>}
+    <div className="admin-page-header">
+      <div className="admin-page-header-main">
+        <Typography.Title level={3} className="admin-page-header-title">{title}</Typography.Title>
+        {description && <Typography.Paragraph type="secondary" className="admin-page-header-desc">{description}</Typography.Paragraph>}
         {publicLocation && (
-          <Typography.Text type="secondary" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginTop: 6 }}>
+          <Typography.Text type="secondary" className="admin-page-header-location">
             <LinkOutlined />前台位置：
             <a href={publicLocation} target="_blank" rel="noreferrer">{publicLocation}</a>
           </Typography.Text>

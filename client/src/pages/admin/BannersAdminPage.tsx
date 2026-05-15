@@ -98,7 +98,7 @@ export function BannersAdminPage() {
           <Card>
             <div style={{ display: 'grid', gridTemplateColumns: 'auto minmax(180px, 280px) 1fr auto', gap: 16, alignItems: 'center' }}>
               <DragHandle dragHandle={dragHandle} />
-              <div style={{ position: 'relative', borderRadius: 10, overflow: 'hidden', background: '#f8fafc', minHeight: 120, display: 'grid', placeItems: 'center' }}>
+              <div style={{ position: 'relative', borderRadius: 10, overflow: 'hidden', background: 'var(--bp-bg-input)', minHeight: 120, display: 'grid', placeItems: 'center' }}>
                 {banner.imageUrl && (videoPattern.test(banner.imageUrl) ? <video src={banner.imageUrl} controls muted playsInline style={{ width: '100%', maxHeight: 180 }} /> : <img src={banner.imageUrl} alt="轮播图" style={{ width: '100%', maxHeight: 180, objectFit: 'cover' }} />)}
                 <Tag color={banner.isActive ? 'success' : 'default'} style={{ position: 'absolute', right: 8, top: 8 }}>{banner.isActive ? '正在显示' : '已隐藏'}</Tag>
               </div>

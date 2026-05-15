@@ -164,7 +164,7 @@ export function ContentSectionsAdminPage({ config = homeContentConfig }: { confi
                 <List
                   dataSource={visibleSections}
                   renderItem={(section, index) => (
-                    <List.Item onClick={() => requestEdit(section)} style={{ cursor: 'pointer', padding: 12, borderRadius: 10, background: editing?.id === section.id ? 'rgba(22,119,255,0.08)' : undefined }}>
+                    <List.Item onClick={() => requestEdit(section)} style={{ cursor: 'pointer', padding: 12, borderRadius: 10, background: editing?.id === section.id ? 'var(--bp-amber-soft)' : undefined }}>
                       <List.Item.Meta title={<Space><Typography.Text>{String(index + 1).padStart(2, '0')}</Typography.Text><Typography.Text strong>{sectionNames[section.sectionKey] || section.title}</Typography.Text></Space>} description={config.moduleHelp[section.sectionKey] || '用于维护网站页面上的一块内容。'} />
                       <Tag color={section.isPublished ? 'success' : 'default'}>{section.isPublished ? '显示中' : '已隐藏'}</Tag>
                     </List.Item>
