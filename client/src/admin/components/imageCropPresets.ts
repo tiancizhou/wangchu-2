@@ -14,6 +14,7 @@ export const IMAGE_CROP_PRESETS = {
   processGallery: { width: 275, height: 160, label: '生产与智造底部轮播图' },
   aboutPreview: { width: 506, height: 406, label: '首页关于我们图片' },
   aboutPreviewGallery: { width: 240, height: 320, label: '首页关于我们四图展示' },
+  projectCase: { width: 386, height: 241, label: '首页项目案例图片' },
   productListCover: { width: 266, height: 182, label: '产品列表封面图' },
   productDetailTop: { width: 372, height: 372, label: '产品详情页顶图' },
   productDetailMiddle: { width: 824, height: 412, label: '产品详情中间图' },

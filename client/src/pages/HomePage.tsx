@@ -54,15 +54,16 @@ function FactoryMenuIcon({ index }: { index: number }) {
 
 function AboutFeatureIcon() {
   return (
-    <svg className="about-preview-feature-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M14 10l24 24" />
-      <path d="M34 6l8 8l-9 9l-8-8z" />
-      <path d="M10 34l4 4l-6 6l-4-4z" />
-      <path d="M38 14l4-4" />
-      <path d="M10 10l28 28" />
-      <path d="M16 6l-8 8l9 9l8-8z" />
-      <path d="M38 34l-4 4l6 6l4-4z" />
-      <path d="M10 14l-4-4" />
+    <svg className="about-preview-feature-svg" viewBox="0 0 64 64" aria-hidden="true">
+      <g transform="rotate(45 32 32)">
+        <rect x="26" y="7" width="12" height="42" rx="1.2" />
+        <path d="M26 49h12l-6 9z" />
+        <rect x="28" y="11" width="8" height="3" fill="#f6f6f6" />
+      </g>
+      <g transform="rotate(-45 32 32)">
+        <rect x="25" y="10" width="14" height="40" rx="1.2" fill="none" stroke="currentColor" strokeWidth="4" />
+        <path d="M25 19h7v7M39 38h-7v7" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square" />
+      </g>
     </svg>
   );
 }
@@ -305,30 +306,32 @@ export function AboutPreview({ section, companyName }: { section?: ContentSectio
 
   return (
     <section className="about-preview-section" id="about">
-      <div className="about-preview-card-shell">
-        <div className="about-preview-header">
-          <h2>{section?.title || '关于我们'}</h2>
-          <p>{title}</p>
+      <Link className="about-preview-link" to="/about" aria-label="查看关于我们详情">
+        <div className="about-preview-card-shell">
+          <div className="about-preview-header">
+            <h2>{section?.title || '关于我们'}</h2>
+            <p>{title}</p>
+          </div>
+          <div className="about-preview-gallery">
+            {Array.from({ length: 4 }).map((_, index) => {
+              const imageUrl = images[index] || images[0];
+              return (
+                <figure className="about-preview-photo" key={index}>
+                  {imageUrl ? <img src={imageUrl} alt={`${section?.title || '关于我们'} ${index + 1}`} /> : <div className={`about-preview-photo-fallback about-preview-photo-fallback-${index + 1}`} />}
+                </figure>
+              );
+            })}
+          </div>
         </div>
-        <div className="about-preview-gallery">
-          {Array.from({ length: 4 }).map((_, index) => {
-            const imageUrl = images[index] || images[0];
-            return (
-              <figure className="about-preview-photo" key={index}>
-                {imageUrl ? <img src={imageUrl} alt={`${section?.title || '关于我们'} ${index + 1}`} /> : <div className={`about-preview-photo-fallback about-preview-photo-fallback-${index + 1}`} />}
-              </figure>
-            );
-          })}
+        <div className="about-preview-features">
+          {items.map((item, index) => (
+            <article className="about-preview-feature" key={index}>
+              <span className="about-preview-icon">{item.icon ? item.icon : <AboutFeatureIcon />}</span>
+              <p>{item.description || ''}</p>
+            </article>
+          ))}
         </div>
-      </div>
-      <div className="about-preview-features">
-        {items.map((item, index) => (
-          <article className="about-preview-feature" key={index}>
-            <span className="about-preview-icon">{item.icon ? item.icon : <AboutFeatureIcon />}</span>
-            <p>{item.description || ''}</p>
-          </article>
-        ))}
-      </div>
+      </Link>
     </section>
   );
 }

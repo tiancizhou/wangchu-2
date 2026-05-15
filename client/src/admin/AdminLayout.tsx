@@ -9,13 +9,10 @@ import {
   LayoutOutlined,
   PictureOutlined,
   AppstoreOutlined,
-  ToolOutlined,
   BulbOutlined,
   TeamOutlined,
-  LinkOutlined,
   BankOutlined,
   ShoppingOutlined,
-  SafetyCertificateOutlined,
   MessageOutlined
 } from '@ant-design/icons';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -31,15 +28,11 @@ const menuGroups: { key: string; label: string; items: MenuEntry[] }[] = [
     key: 'content',
     label: '内容编辑',
     items: [
-      { key: '/admin/navigation', label: '页面导航', icon: <LinkOutlined /> },
       { key: '/admin/banners', label: '轮播图管理', icon: <PictureOutlined /> },
-      { key: '/admin/page/enterprise', label: '企业管理模块', icon: <AppstoreOutlined /> },
-      { key: '/admin/page/support', label: '生产设计与制作', icon: <ToolOutlined /> },
-      { key: '/admin/page/support-secondary', label: '技术支持二级页面', icon: <ToolOutlined /> },
-      { key: '/admin/page/process', label: '生产与智造', icon: <BulbOutlined /> },
       { key: '/admin/page/about', label: '关于我们', icon: <TeamOutlined /> },
-      { key: '/admin/page/consult', label: '渠道合作', icon: <MessageOutlined /> },
-      { key: '/admin/page/legal', label: '法律声明', icon: <SafetyCertificateOutlined /> },
+      { key: '/admin/products?tab=categories', label: '产品与项目分类', icon: <ShoppingOutlined /> },
+      { key: '/admin/page/process', label: '生产与智造', icon: <BulbOutlined /> },
+      { key: '/admin/page/project-cases', label: '项目案例', icon: <AppstoreOutlined /> },
       { key: '/admin/page/contact', label: '联系我们', icon: <MessageOutlined /> },
       { key: '/admin/site', label: '页脚', icon: <BankOutlined /> }
     ]
@@ -48,9 +41,7 @@ const menuGroups: { key: string; label: string; items: MenuEntry[] }[] = [
     key: 'data',
     label: '数据管理',
     items: [
-      { key: '/admin/products', label: '产品管理', icon: <ShoppingOutlined /> },
-      { key: '/admin/certificates', label: '荣誉资质', icon: <SafetyCertificateOutlined /> },
-      { key: '/admin/consultations', label: '咨询记录', icon: <MessageOutlined /> }
+      { key: '/admin/products', label: '产品管理', icon: <ShoppingOutlined /> }
     ]
   }
 ];
@@ -93,7 +84,10 @@ export function AdminLayout() {
     dashboardEntry,
     ...menuGroups.flatMap((group) => group.items)
   ]
-    .filter((item) => location.pathname === item.key || (item.key !== dashboardKey && location.pathname.startsWith(item.key)))
+    .filter((item) => {
+      const [itemPath, itemSearch] = item.key.split('?');
+      return location.pathname === itemPath && (itemSearch ? location.search === `?${itemSearch}` : !location.search) || (item.key !== dashboardKey && !itemSearch && !location.search && location.pathname.startsWith(itemPath));
+    })
     .map((item) => item.key);
 
   const userMenu: MenuProps['items'] = [

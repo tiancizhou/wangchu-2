@@ -27,12 +27,10 @@ export const homeContentConfig: ContentSectionEditorConfig = {
   pageKey: 'home',
   title: '首页内容管理',
   description: '在这里修改首页上的文字、图片和模块显示状态。选择一个模块后填写表单，保存后会同步到网站首页。',
-  editableKeys: ['featureCards', 'supportModule', 'processModule', 'aboutPreview', 'projectCases'],
+  editableKeys: ['aboutPreview', 'processModule', 'projectCases'],
   moduleHelp: {
-    featureCards: '显示在首页顶部服务优势区域，建议保持 4 个卡片。',
-    supportModule: '显示在”生产设计与制作”区域，用于介绍生产、检测、检验能力。',
-    processModule: '显示在首页深色工艺区域，用于介绍制作工艺和设备能力。',
-    aboutPreview: '显示在首页”关于我们”区域，用于展示公司简介和图片。',
+    aboutPreview: '显示在首页”关于我们”区域，用于展示公司简介、四图展示和底部说明。',
+    processModule: '显示在首页“生产与智造”区域，用于介绍制作工艺和设备能力。',
     projectCases: '显示在首页”项目案例”区域，用于展示项目案例图片、标题和说明。'
   },
   loadingText: '首页内容加载中...',

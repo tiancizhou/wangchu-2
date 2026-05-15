@@ -17,12 +17,9 @@ import { ProductsPage } from './pages/ProductsPage';
 import { SupportDetailPage } from './pages/SupportDetailPage';
 import { SupportPage } from './pages/SupportPage';
 import { BannersAdminPage } from './pages/admin/BannersAdminPage';
-import { CertificatesAdminPage } from './pages/admin/CertificatesAdminPage';
-import { ConsultationsAdminPage } from './pages/admin/ConsultationsAdminPage';
 import { ContentSectionsAdminPage } from './pages/admin/ContentSectionsAdminPage';
 import { DashboardPage } from './pages/admin/DashboardPage';
 import { LoginPage } from './pages/admin/LoginPage';
-import { NavigationAdminPage } from './pages/admin/NavigationAdminPage';
 import { PageEditorAdminPage } from './pages/admin/PageEditorAdminPage';
 import { ProductEditPage } from './pages/admin/ProductEditPage';
 import { ProductManagementAdminPage } from './pages/admin/ProductManagementAdminPage';
@@ -59,15 +56,12 @@ const router = createBrowserRouter([
           { index: true, element: <DashboardPage /> },
           { path: 'page/:page', element: <PageEditorAdminPage /> },
           { path: 'site', element: <SiteSettingsPage /> },
-          { path: 'navigation', element: <NavigationAdminPage /> },
           { path: 'content', element: <ContentSectionsAdminPage /> },
           { path: 'categories', element: <Navigate to="/admin/products?tab=categories" replace /> },
           { path: 'products', element: <ProductManagementAdminPage /> },
           { path: 'products/new', element: <ProductEditPage /> },
           { path: 'products/:id/edit', element: <ProductEditPage /> },
-          { path: 'banners', element: <BannersAdminPage /> },
-          { path: 'certificates', element: <CertificatesAdminPage /> },
-          { path: 'consultations', element: <ConsultationsAdminPage /> }
+          { path: 'banners', element: <BannersAdminPage /> }
         ] }]
       }
     ]

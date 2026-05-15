@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { getNavigation, getSiteProfile, type NavigationItem, type SiteProfile } from '../../api/publicApi';
 
 const fallbackProfile: SiteProfile = {
@@ -36,7 +36,7 @@ const fallbackProfile: SiteProfile = {
 const publicViewport = 'width=1200';
 
 const fallbackNavigation: NavigationItem[] = [
-  { id: 'about', label: '关于我们', url: '/about', sortOrder: 1, isVisible: true, openInNewTab: false },
+  { id: 'about', label: '关于我们', url: '/#about', sortOrder: 1, isVisible: true, openInNewTab: false },
   { id: 'products', label: '产品与项目分类', url: '/products', sortOrder: 2, isVisible: true, openInNewTab: false },
   { id: 'process', label: '生产与智造', url: '/#process', sortOrder: 3, isVisible: true, openInNewTab: false },
   { id: 'project-cases', label: '项目案例', url: '/#project-cases', sortOrder: 4, isVisible: true, openInNewTab: false },
@@ -72,6 +72,7 @@ function FooterLink({ label, url }: { label?: string; url?: string }) {
 
 export function PublicLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === '/';
   const [profile, setProfile] = useState<SiteProfile>(fallbackProfile);
   const [navigation, setNavigation] = useState<NavigationItem[]>(fallbackNavigation);
@@ -90,6 +91,18 @@ export function PublicLayout() {
     window.requestAnimationFrame(() => document.querySelector(location.hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   }, [location.pathname, location.hash]);
 
+  function handleNavigationClick(event: React.MouseEvent, url: string) {
+    if (!url.startsWith('/#')) return;
+    event.preventDefault();
+    if (location.pathname !== '/') {
+      navigate(url);
+      return;
+    }
+    const target = document.querySelector(url.slice(1));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.history.replaceState(null, '', url);
+  }
+
   return (
     <div className={isHome ? 'public-site public-site-home' : 'public-site'}>
       <header className={isHome ? 'site-header site-header-home' : 'site-header'}>
@@ -100,7 +113,7 @@ export function PublicLayout() {
         </Link>
         <nav>
           {navigation.map((item) => item.url.startsWith('/') && !item.openInNewTab
-            ? <Link to={item.url} key={item.id}>{item.label}</Link>
+            ? <Link to={item.url} onClick={(event) => handleNavigationClick(event, item.url)} key={item.id}>{item.label}</Link>
             : <a href={item.url} target={item.openInNewTab ? '_blank' : undefined} rel={item.openInNewTab ? 'noreferrer' : undefined} key={item.id}>{item.label}</a>)}
         </nav>
         <div className="phone">☎ {profile.phone || profile.hotline || fallbackProfile.phone}</div>

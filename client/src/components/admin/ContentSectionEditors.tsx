@@ -521,20 +521,20 @@ export function ProjectCasesEditor({ items, onUpdate, onChange }: { items: Proje
 
   return (
     <div>
-      <Typography.Paragraph type="secondary">显示在首页“项目案例”区域，每行展示 3 张，共两行。建议设置 6 个案例。</Typography.Paragraph>
-      <Space style={{ marginBottom: 12 }}><Button type="primary" disabled={!canAddItem} onClick={addItem}>新增案例</Button><Typography.Text type="secondary">最多设置 6 个案例</Typography.Text></Space>
+      <Typography.Paragraph type="secondary">显示在首页“项目案例”区域，前台每行展示 3 张，共两行。图片会按前台卡片比例裁剪，建议设置 6 个案例。</Typography.Paragraph>
+      <Space style={{ marginBottom: 12 }}><Button type="primary" disabled={!canAddItem} onClick={addItem}>新增案例</Button><Typography.Text type="secondary">已设置 {items.length}/6 个案例</Typography.Text></Space>
       <SectionCardGroup mode="accordion" defaultExpandedIndex={0}>
         {items.map((item, index) => (
           <SectionCard key={index} title={item.title || `案例 ${index + 1}`} description={item.description?.slice(0, 40) || '展开后编辑案例内容'} extra={<ConfirmButton danger size="small" title="确定删除这个案例吗？" onConfirm={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}>删除</ConfirmButton>}>
-            <Row gutter={16}>
+            <Row gutter={16} align="top">
               <Col xs={24} lg={12}>
                 <Form layout="vertical">
                   <Form.Item label="案例标题"><Input value={item.title || ''} onChange={(e) => onUpdate(index, { title: e.target.value })} placeholder="例如：汽车润滑油项目" /></Form.Item>
-                  <Form.Item label="案例描述"><Input.TextArea rows={3} value={item.description || ''} onChange={(e) => onUpdate(index, { description: e.target.value })} placeholder="简要描述项目内容" /></Form.Item>
+                  <Form.Item label="案例描述"><Input.TextArea rows={4} value={item.description || ''} onChange={(e) => onUpdate(index, { description: e.target.value })} placeholder="前台显示在标题下方，建议控制在一行内" /></Form.Item>
                 </Form>
               </Col>
               <Col xs={24} lg={12}>
-                <Card title="案例图片"><Dropzone value={item.imageUrl} cropPreset="processMain" onChange={(url) => onUpdate(index, { imageUrl: url })} hint="建议上传 3:2 比例图片" /></Card>
+                <Card title="案例图片（前台卡片比例）" size="small"><Dropzone value={item.imageUrl} cropPreset="projectCase" previewWidth={260} previewMaxHeight={180} onChange={(url) => onUpdate(index, { imageUrl: url })} hint="上传前裁剪为 386 × 241，与前台项目案例卡片一致" /></Card>
               </Col>
             </Row>
           </SectionCard>
